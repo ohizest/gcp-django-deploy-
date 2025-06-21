@@ -24,3 +24,12 @@ Created a VM Instance on on Google Cloud Platform using the settings below:
     --address=YOUR_STATIC_IP \
     --boot-disk-size=10GB
 ```
+### Step 2: Clone the repository
+After I successfully ssh into the repository, I installed the git dependency to enable me use git command.
+```
+sudo apt install git -y
+```
+Then I cloned my repository.
+```
+git clone
+```
