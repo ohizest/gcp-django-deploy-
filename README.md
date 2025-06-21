@@ -24,12 +24,17 @@ Created a VM Instance on on Google Cloud Platform using the settings below:
     --address=YOUR_STATIC_IP \
     --boot-disk-size=10GB
 ```
-### Step 2: Clone the repository
+### Step 2: Install the Dependencies
 After I successfully ssh into the repository, I installed the git dependency to enable me use git command.
 ```
 sudo apt install git -y
 ```
 Then I cloned my repository.
 ```
-git clone
+git clone https://github.com/ohizest/gcp-django-deploy-.git
+```
+Next we install the Python and Nginx dependencies
+```
+sudo apt install -y python3 python3-pip python3-venv
+sudo apt install nginx -y
 ```
