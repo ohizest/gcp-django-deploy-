@@ -5,9 +5,9 @@ A step-by-step implementation of a Django web application hosted on a Google Clo
 
  ### Overview
 
-*Backend Framework: Django
-*Cloud Provider: Google Cloud Platform (GCP)
-*Web Server: Nginx
-*App Server: Gunicorn
-*OS: Ubuntu 22.04 LTS
-*Process Manager: systemd
+* Backend Framework: Django
+* Cloud Provider: Google Cloud Platform (GCP)
+* Web Server: Nginx
+* App Server: Gunicorn
+* OS: Ubuntu 22.04 LTS
+* Process Manager: systemd
