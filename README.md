@@ -109,3 +109,27 @@ To confirm it was running successfully, I checked the status:
 ```
 sudo systemctl status gunicorn
 ```
+### Step 8: Set Up Nginx as a Reverse Proxy for Gunicorn
+To expose the Django app to the web securely and efficiently, I configured Nginx to act as a reverse proxy. This allows Nginx to handle client requests and forward them to Gunicorn, which runs the Django application.
+
+I created a new Nginx server block:
+```
+sudo nano /etc/nginx/sites-available/django_project
+```
+And added the following configuration:
+```
+server {
+    listen 80;
+    server_name 35.203.79.19;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location /static/ {
+        root /home/ohiremen58/gcp-django-deploy-/django_app;
+    }
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/run/gunicorn.sock;
+    }
+}
+```
