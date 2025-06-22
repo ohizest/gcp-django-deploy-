@@ -69,3 +69,43 @@ sudo nano settings.py
 ALLOWED HOSTS ['35.203.79.19', 'localhost']
 ```
 This change ensures that Django accepts and serves requests coming from those specified hosts — which is essential when moving from local development to a production environment.
+### Step 7: Created a Systemd Service for Gunicorn
+To ensure that my Django application runs reliably and starts automatically on boot, I created a systemd service to manage Gunicorn, the WSGI server serving my app.
+
+I created a new service file:
+```
+sudo nano /etc/systemd/system/gunicorn.service
+```
+Here’s the content of the service definition:
+```
+[Unit]
+Description=gunicorn daemon for Django app
+After=network.target
+
+[Service]
+User=ohiremen58
+Group=www-data
+WorkingDirectory=/home/ohiremen58/gcp-django-deploy-/django_app
+Environment="PATH=/home/ohiremen58/gcp-django-deploy-/django_app/appenv/bin"
+ExecStart=/home/ohiremen58/gcp-django-deploy-/django_app/appenv/bin/gunicorn \
+    --access-logfile - \
+    --workers 3 \
+    --bind unix:/run/gunicorn.sock \
+    django_testapp.wsgi:application
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+```
+After saving the file, I enabled and started the service:
+```
+sudo systemctl daemon-reexec
+sudo systemctl daemon-reload
+sudo systemctl enable gunicorn
+sudo systemctl start gunicorn
+```
+To confirm it was running successfully, I checked the status:
+```
+sudo systemctl status gunicorn
+```
