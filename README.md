@@ -13,8 +13,8 @@ A step-by-step implementation of a Django web application hosted on a Google Clo
 * Process Manager: systemd
 * Custom firewall rules and static IP setup
 
-### Step 1: Create a VM on Google Cloud Platform
-Created a VM Instance on on Google Cloud Platform using the settings below:
+### Step 1: Provisioned a Virtual Machine on Google Cloud
+I created a Compute Engine VM instance on Google Cloud Platform using the following configuration:
 ```
  --zone=us-central1-a \
     --machine-type=e2-micro \
@@ -24,52 +24,48 @@ Created a VM Instance on on Google Cloud Platform using the settings below:
     --address=YOUR_STATIC_IP \
     --boot-disk-size=10GB
 ```
-### Step 2: Install the Dependencies
-After I successfully ssh into the repository, I installed the git dependency to enable me use git command.
+### Step 2: Installed Required Dependencies
+After SSH-ing into the VM, I installed system dependencies to support version control, Python, and web server operations.
 ```
-sudo apt install git -y
+sudo apt update && sudo apt install -y git python3 python3-pip python3-venv nginx
 ```
-Then I cloned my repository.
+Once Git was installed, I cloned this repository:
 ```
 git clone https://github.com/ohizest/gcp-django-deploy-.git
+cd gcp-django-deploy-/django_app
 ```
-Next we install the Python and Nginx dependencies
+### Step 3: Set Up a Python Virtual Environment
+To isolate project dependencies, I created a virtual environment within the project directory:
 ```
-sudo apt install -y python3 python3-pip python3-venv
-sudo apt install nginx -y
+python3 -m venv appenv
+source appenv/bin/activate 
 ```
-### Step 3: Create a Virtual Environment and Activate it
-The below command creates a working environmnent (appenv) in the current directory
+All Python packages were installed within this virtual environment to avoid polluting the system Python installation.
+### Step 4: Installed Django and Gunicorn
+With the virtual environment activated, I installed the Django framework and Gunicorn — the WSGI server that will serve the application:
 ```
-python3 -m venv appenv 
+pip3 install django gunicorn
 ```
-Since we are on Linux Ubuntu, we use this command to activate the virtual environment.
+This setup ensures the app is ready to be served in a production-grade environment.
+### Step 5: Created the Django Project Structure
+Inside the django_app directory, I initialized a new Django project(django_testapp). I chose to place the project files directly in the current directory by appending a dot (.) to the command:
 ```
-source appenv/bin/activate
+django-admin startproject django_testapp .
 ```
-### Step 4: Install Django and Gunicorn in the Virtual Environment
-```
-pip3 install django
-pip3 install gunicorn
-```
-### Step 5: Create a Django Project folder that will contain the Django files
-```
-django-admin startproject project_name .
-```
-project_name: Replace this with the actual name you want for your Django project. In my case, it's "django_testapp"
-.: The dot at the end tells Django to create the project files in the current directory.
+This created the standard Django project structure (with settings, URLs, and WSGI configuration) right at the root of my app folder. It simplifies deployment by aligning the project layout with the web server and service configs that follow.
 
-### Step 6: Configure settings.py for Allowed Hosts
-Django restricts incoming requests to a defined list of hosts for security reasons. To allow requests from your Google Cloud VM and local development environment, you need to update the ALLOWED_HOSTS setting in the Django project's settings.py file.
-* Navigate to the Django project directory:
+### Step 6: Configure ```settings.py``` for Allowed Hosts
+Django restricts incoming requests to a defined list of hosts for security reasons. To allow my Django app to respond to external requests from the GCP VM, I updated the ALLOWED_HOSTS list in the ```settings.py``` file.
+First, I navigated into the Django project directory:
 ```
 cd django_testapp
 ```
-* Open the settings.py file in a text editor:
+Then I opened the ```settings.py``` file using nano:
 ```
 sudo nano settings.py
 ```
-* I located the ALLOWED_HOSTS line and updated it to include: The external/static IP address of my VM Instance
+* I located the ALLOWED_HOSTS line and updated it to include: The external/static IP address of my VM Instance and 'localhost' for local development
 ```
 ALLOWED HOSTS ['35.203.79.19', 'localhost']
 ```
+This change ensures that Django accepts and serves requests coming from those specified hosts — which is essential when moving from local development to a production environment.
