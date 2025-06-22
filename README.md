@@ -133,3 +133,18 @@ server {
     }
 }
 ```
+* Replace YOUR_SERVER_IP_OR_DOMAIN with your actual VM external IP, in my case I used 35.203.79.19
+Then I enabled the config:
+```
+sudo ln -s /etc/nginx/sites-available/django_project /etc/nginx/sites-enabled
+```
+I tested the Nginx config:
+```
+sudo nginx -t
+```
+The output was "syntax is ok" and "test is successful", then I reloaded Nginx:
+```
+sudo systemctl restart nginx
+```
+* Final Result
+At this point, visiting http://35.203.79.19 in a browser loaded the Django app served through Gunicorn and proxied by Nginx
