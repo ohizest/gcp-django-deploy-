@@ -38,3 +38,17 @@ Next we install the Python and Nginx dependencies
 sudo apt install -y python3 python3-pip python3-venv
 sudo apt install nginx -y
 ```
+### Step 3: Create a Virtual Environment and Activate it
+The below command creates a working environmnent (appenv) in the current directory
+```
+python3 -m venv appenv 
+```
+Since we are on Linux Ubuntu, we use this command to activate the virtual environment.
+```
+source appvenv/bin/activate
+```
+### Step 4: Install Django and Gunicorn
+```
+pip3 install django
+pip3 install gunicorn
+```
