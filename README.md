@@ -45,10 +45,31 @@ python3 -m venv appenv
 ```
 Since we are on Linux Ubuntu, we use this command to activate the virtual environment.
 ```
-source appvenv/bin/activate
+source appenv/bin/activate
 ```
-### Step 4: Install Django and Gunicorn
+### Step 4: Install Django and Gunicorn in the Virtual Environment
 ```
 pip3 install django
 pip3 install gunicorn
+```
+### Step 5: Create a Django Project folder that will contain the Django files
+```
+django-admin startproject project_name .
+```
+project_name: Replace this with the actual name you want for your Django project. In my case, it's "django_testapp"
+.: The dot at the end tells Django to create the project files in the current directory.
+
+### Step 6: Configure settings.py for Allowed Hosts
+Django restricts incoming requests to a defined list of hosts for security reasons. To allow requests from your Google Cloud VM and local development environment, you need to update the ALLOWED_HOSTS setting in the Django project's settings.py file.
+* Navigate to the Django project directory:
+```
+cd django_testapp
+```
+* Open the settings.py file in a text editor:
+```
+sudo nano settings.py
+```
+* I located the ALLOWED_HOSTS line and updated it to include: The external/static IP address of my VM Instance
+```
+ALLOWED HOSTS ['35.203.79.19', 'localhost']
 ```
